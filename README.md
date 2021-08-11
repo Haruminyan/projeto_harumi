@@ -11,14 +11,43 @@ Laravel Lumen is a stunningly fast PHP micro-framework for building web applicat
 
 Documentation for the framework can be found on the [Lumen website](https://lumen.laravel.com/docs).
 
-## Contributing
+## Sobre o projeto
 
-Thank you for considering contributing to Lumen! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+A proposta do sistema é de criar um backend simples com API Restful, que simula cadastro de usuários que podem (ou não) realizar transações entre si. Todas requisições são tratadas via JSON.
+Os usuários podem ser cadastrados com 2 tipos diferentes: usuário comum (1) e lojista (2). 
+O usuário comum pode realizar transações para qualquer outro cliente ou lojista, já o lojista só pode receber transações, nunca efetuar.
+O usuário precisa ser cadastrado com: nome, cpf/cnpj, tipo, senha, email e saldo. Os campos de cpf e email são únicos.
+A transação precisa definir pagador, recebedor e valor da transação. O valor a ser transferido não pode ser superior ao que o cliente possua na conta.
 
-## Security Vulnerabilities
+## Como utilizar
 
-If you discover a security vulnerability within Lumen, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
+- Copie ou faça o download deste repositório
+- No terminal vamos instalar o composer para para instalar todas as dependências.
+	<code> composer install </code>
+- Antes de iniciar o projeto, é necessário criar um banco de dados com o nome "paydb", depois alterar no arquivo .env inserindo o nome do banco e a senha criada por você.
+- Após criar o banco, vamos executar o comando para criar as tabelas.
+	<code> php artisan migrate </code>
+- Para realizar teste de cadastro de usuário utilize o seguinte caminho, método POST no formato JSON. Tipo indica se o usuário é 1- comum ou 2- lojista
+<code>POST http://localhost/projeto_harumi/public/CadastraUsuario </code> 
 
-## License
+<pre>
+{ 
+  "nome" 	   : "Harumi",
+  "cpf_cnpj"   : "12345678901",
+  "email" 	   : "teste@teste.com", 
+  "tipo"  	   : "1", 
+  "senha" 	   : "123456",	 
+  "saldo" 	   : "1000" 
+}
+</pre>   
 
-The Lumen framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+- No teste de transação no método POST, temos o payer(pagador), payee(recebedor) e value(valor) que vai ser transferido.
+<code>POST http://localhost/projeto_harumi/public/Transacao </code>
+<pre>
+{ 
+"payer" : "1", 
+"payee" : "2",  
+"value" : "100.55" 
+}
+</pre>
+
